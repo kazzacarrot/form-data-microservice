@@ -1,0 +1,26 @@
+
+
+var mongo = require('mongodb').MongoClient
+var url = "mongodb://localhost:27017/" + process.argv[2];
+mongo.connect(url, function(err, db) {
+if (err) throw err;
+// db gives access to the database
+    docs =  db.collection('users')
+    tina = {
+	  username: "tinatime"
+	}
+    docs.find(tina).toArray(
+	  function(err, data) {
+	    if (err) throw err;
+	    console.log(data);
+
+	    docs.update(tina, { $set: {age: 40 }}, function(err, data){
+		    docs.find(tina).toArray(
+			  function(err, data) {
+			    if (err) throw err;
+			    db.close()
+			    console.log(data);
+			})
+		})
+    })
+})
